@@ -44,22 +44,7 @@
 <script>
 
     async function getPincode() {
-        await fetch("https://api.ipdata.co/?api-key=4b66acfd6d47fb25869319c2b8e50c659748331e691cd3fa093b991c").
-            then(response => {
-                return response.json();
-            })
-            .then(data => {
-                //handle data
-                console.log(data);
-                let urlLink = `https://api.ip2location.io/?key=DEBCA8B98BEF117E0A981F69D536F0D5&i&ip=${data.ip}&format=json`;
-                return fetch(urlLink, {
-                    method: "GET",
-                    // headers: {
-                    //     "Access-Control-Allow-Origin": "*"
-                    // },
-                    // mode: 'no-cors'
-                })
-            }).then(response => {
+        await fetch("https://api.ip2location.io/?key=DEBCA8B98BEF117E0A981F69D536F0D5").then(response => {
                 return response.json();
             }).then(data => {
                 let pincodeArea = document.getElementById("pin");
