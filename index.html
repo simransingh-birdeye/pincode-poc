@@ -60,7 +60,7 @@
                     // mode: 'no-cors'
                 })
             }).then(response => {
-                return true;
+                return response.json();
             }).then(data => {
                 let pincodeArea = document.getElementById("pin");
                 pincodeArea.style.display = "block";
