@@ -3,50 +3,70 @@
 
 <head>
     <title>Pincode POC</title>
+    <style>
+        h1{
+            text-align: center;
+        }
 
+        div{
+            display: flex;
+            justify-content: center;
+        }
+
+        .pin{
+            display: none;
+        }
+
+        button{
+            margin-left: 20px;
+            width: 100px;
+            height: 30px;
+            margin-top: 20px;
+            background-color: black;
+            color: whitesmoke;
+        }
+
+    </style>
 </head>
+
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <body>
-    <div>Pincode POC</div>
-    <button id="btn-search">Search</button>
-    <h2></h2>
+    <h1>Pincode POC</h1>
+    <div>
+        <h4>Click here to get your pincode</h4>
+        <button id="btn-search">Search</button>
+    </div>
+    <div>
+        <h4 id="pin"></h4>
+    </div>
 </body>
 <script>
 
     async function getPincode() {
-
-        // console.log(data);
-        let urlLink = `https://api.ip2location.io/?key=DEBCA8B98BEF117E0A981F69D536F0D5&ip=106.215.93.166&format=json`;
-        await fetch(urlLink, {
-            method: "GET",
-            // headers: {
-            //     "Access-Control-Allow-Origin": "*"
-            // },
-            // mode: 'no-cors'
-        })
-        // await axios.get(urlLink, {
-        //     // withCredentials: false,
-        //     headers: {
-        //         'Access-Control-Allow-Origin': '*',
-        //         'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-        //     },
-        //     withCredentials: false
-        // })
-            .then(response => {
-                console.log("res --> ", response);
-                // return response.json();
+        await fetch("https://api.ipdata.co/?api-key=4b66acfd6d47fb25869319c2b8e50c659748331e691cd3fa093b991c").
+            then(response => {
+                return response.json();
             })
-        // await fetch("https://api.ipdata.co/?api-key=4b66acfd6d47fb25869319c2b8e50c659748331e691cd3fa093b991c").
-        //     then(response => {
-        //         return response.json();
-        //     })
-        //     .then(data => {
-        //         //handle data
-
-        //     })
+            .then(data => {
+                //handle data
+                console.log(data);
+                let urlLink = `https://api.ip2location.io/?key=DEBCA8B98BEF117E0A981F69D536F0D5&i&ip=${data.ip}&format=json`;
+                return fetch(urlLink, {
+                    method: "GET",
+                    // headers: {
+                    //     "Access-Control-Allow-Origin": "*"
+                    // },
+                    // mode: 'no-cors'
+                })
+            }).then(response => {
+                return true;
+            }).then(data => {
+                let pincodeArea = document.getElementById("pin");
+                pincodeArea.style.display = "block";
+                pincodeArea.innerText = `Your pincode : ${data.zip_code}`;
+            })
     }
-    
 
     document.getElementById("btn-search").addEventListener("click", getPincode);
 
