@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pincode POC</title>
+
+</head>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<body>
+    <div>Pincode POC</div>
+    <button id="btn-search">Search</button>
+    <h2></h2>
+</body>
+<script>
+
+    async function getPincode() {
+
+        // console.log(data);
+        let urlLink = `https://api.ip2location.io/?key=DEBCA8B98BEF117E0A981F69D536F0D5&ip=106.215.93.166&format=json`;
+        await fetch(urlLink, {
+            method: "GET",
+            // headers: {
+            //     "Access-Control-Allow-Origin": "*"
+            // },
+            mode: 'no-cors'
+        })
+        // await axios.get(urlLink, {
+        //     // withCredentials: false,
+        //     headers: {
+        //         'Access-Control-Allow-Origin': '*',
+        //         'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
+        //     },
+        //     withCredentials: false
+        // })
+            .then(response => {
+                console.log("res --> ", response);
+                // return response.json();
+            })
+        // await fetch("https://api.ipdata.co/?api-key=4b66acfd6d47fb25869319c2b8e50c659748331e691cd3fa093b991c").
+        //     then(response => {
+        //         return response.json();
+        //     })
+        //     .then(data => {
+        //         //handle data
+
+        //     })
+    }
+    
+
+    document.getElementById("btn-search").addEventListener("click", getPincode);
+
+
+</script>
+
+</html>
