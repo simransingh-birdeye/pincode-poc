@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pincode POC</title>
+    <style>
+        h1 {
+            text-align: center;
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+        }
+
+        .pin {
+            display: none;
+        }
+
+        button {
+            margin-left: 20px;
+            width: 100px;
+            height: 30px;
+            margin-top: 20px;
+            background-color: black;
+            color: whitesmoke;
+        }
+    </style>
+</head>
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+
+<body>
+    <h1>Ip2location POC</h1>
+    <div>
+        <h4>Click here to get your pincode</h4>
+        <button id="btn-search">Search</button>
+    </div>
+    <div>
+        <h4 id="pin"></h4>
+    </div>
+    <div>
+        <ul class="list-group" id="locations"></ul>
+    </div>
+</body>
+<script>
+
+    function distance(lat1, lon1, lat2, lon2, loc) {
+        var R = 6371; // km (change this constant to get miles)
+        var dLat = (lat2 - lat1) * Math.PI / 180;
+        var dLon = (lon2 - lon1) * Math.PI / 180;
+        var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        var d = R * c;
+        if (d > 1) loc.distDiffKm = Math.round(d) + " km";
+        else if (d <= 1) loc.distDiffKm = Math.round(d * 1000) + " m";
+
+        return Math.round(d * 1000);
+        return d;
+    }
+
+    async function getPincode() {
+        await axios.get('http://localhost:8080/api/getPincode')
+            .then(response => {
+                console.log("response --> ", response.data.zip_code);
+                let pincodeArea = document.getElementById("pin");
+                pincodeArea.style.display = "block";
+                pincodeArea.innerText = `Your pincode : ${response.data.zip_code}`;
+
+                axios.get("https://rohitanandbirdeye.github.io/geolocation/test.json").
+                    then(res => {
+                        let locations = res.data;
+                        locations.forEach(function (loc, k) {
+                            if (loc.latitude && loc.longitude) {
+                                loc.distDiff = distance(loc.latitude, loc.longitude, res.latitude, res.longitude, loc);
+                            } else {
+                                loc.distDiff = 1000000000;
+                                loc.distDiffKm = "∞ / not known";
+                            }
+                        });
+
+                        locations = locations.sort(function (a, b) {
+                            return a.distDiff - b.distDiff;
+                        });
+                        console.log(locations);
+                        let locationsArr = [];
+                        locations.forEach(function (loc, k) {
+                            locationsArr += '<li class="list-group-item d-flex justify-content-between align-items-center">' + loc.businessAlias + '<span class="badge badge-primary badge-pill">' + loc.distDiffKm + '</span></li>';
+                        });
+                        console.log("locationsArr --> ",locationsArr);
+                        let locationList = document.getElementById("locations");
+                        locationList.innerHTML = locationsArr;
+                    })
+            })
+    }
+
+    document.getElementById("btn-search").addEventListener("click", getPincode);
+
+
+</script>
+
+</html>
