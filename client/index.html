@@ -76,7 +76,6 @@
     async function getPincode() {
         await axios.get('http://localhost:8080/api/getPincode')
             .then(response => {
-                console.log("response --> ", response.data.zip_code);
                 let pincodeArea = document.getElementById("pin");
                 pincodeArea.style.display = "block";
                 pincodeArea.innerText = `Your pincode : ${response.data.zip_code}`;
