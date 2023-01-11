@@ -74,8 +74,9 @@
     }
 
     async function getPincode() {
-        await axios.get('http://localhost:8080/api/getPincode')
+        await axios.get('https://get-pincode-poc.up.railway.app/api/getPincode')
             .then(response => {
+                console.log("data --> ",response.data);
                 let pincodeArea = document.getElementById("pin");
                 pincodeArea.style.display = "block";
                 pincodeArea.innerText = `Your pincode : ${response.data.zip_code}`;
