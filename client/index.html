@@ -18,12 +18,19 @@
         }
 
         button {
-            margin-left: 20px;
+            margin-left: 30px;
             width: 100px;
             height: 30px;
             margin-top: 20px;
             background-color: black;
             color: whitesmoke;
+        }
+
+        #locations {
+            margin-top: 20px;
+            height: 500px;
+            display: block;
+            overflow: auto;
         }
     </style>
 </head>
@@ -79,7 +86,7 @@
                         let locations = res.data;
                         locations.forEach(function (loc, k) {
                             if (loc.latitude && loc.longitude) {
-                                loc.distDiff = distance(loc.latitude, loc.longitude, res.latitude, res.longitude, loc);
+                                loc.distDiff = distance(loc.latitude, loc.longitude, response.data.latitude, response.data.longitude, loc);
                             } else {
                                 loc.distDiff = 1000000000;
                                 loc.distDiffKm = "∞ / not known";
